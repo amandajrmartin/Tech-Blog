@@ -2,6 +2,8 @@ const router = require('express').Router();
 const { User, BlogPost } = require('../models');
 
 router.get('/', async (req, res) => {
+    console.log("Req Session Obj: ", req.session);
+    
   try {
       const dbBlogs = await BlogPost.findAll(
       // {
