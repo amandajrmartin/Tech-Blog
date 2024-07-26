@@ -1,6 +1,11 @@
 const { User } = require('../../models');
+const blogRoutes = require('./blogRoutes');
 
 const router = require('express').Router();
+
+
+// ALL od these rouetes are PREFIXED with '/api'
+router.use('/blogs', blogRoutes);
 
 // all of therRoutes in this file are PREFIXED with '/api'
 router.post('/users', (req, res) => {
