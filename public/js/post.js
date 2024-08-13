@@ -8,7 +8,6 @@ document.getElementById('new-post-form').addEventListener('submit', async functi
       title: title,
       content: content
     };
-    console.log("Form data: ", newPost);
 
     try {
       const response = await fetch('/api/blogs', {
@@ -18,7 +17,6 @@ document.getElementById('new-post-form').addEventListener('submit', async functi
         },
         body: JSON.stringify(newPost)
       });
-      console.log("Response: ", response)
       if (response.ok) {
         console.log('Blog post created');
         window.location.href = '/';

@@ -2,14 +2,8 @@ const router = require('express').Router();
 const { User, BlogPost } = require('../models');
 
 router.get('/', async (req, res) => {
-    console.log("Req Session Obj: ", req.session);
-    
   try {
-      const dbBlogs = await BlogPost.findAll(
-      // {
-      //   include: [{ model: User, attributes: ['username'] }]
-      // }
-      );
+      const dbBlogs = await BlogPost.findAll();
       const user = await req.session.username;
       console.log(`user: ${user} -home.js:8`);
       const posts = dbBlogs.map((post) =>

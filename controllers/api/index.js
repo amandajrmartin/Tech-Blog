@@ -1,41 +1,11 @@
-const { User } = require('../../models');
-const blogRoutes = require('./blogRoutes');
-
 const router = require('express').Router();
 
+const userRoutes = require('./user-routes');
+const blogRoutes = require('./blog-routes');
+const comment = require('./comment-routes')
 
-// ALL od these rouetes are PREFIXED with '/api'
+router.use('/users', userRoutes);
 router.use('/blogs', blogRoutes);
-
-// all of therRoutes in this file are PREFIXED with '/api'
-router.post('/users', (req, res) => {
-    console.log("Incoming Req body: ", req.body);
-
-    // what do we do with this data (?)  --> Create A NEW USER in the Db
-  
-    User.create(req.body)
-        .then(data => {
-            console.log("data: ", data.dataValues);
-            let newUser = data.dataValues;
-
-            // -->  we are going to save data to the SESSION object
-            req.session.save( () => {
-                req.session.user_id = newUser.id;
-                req.session.username = newUser.username
-                req.session.loggedIn = true
-                // and what do we RETURN to the incoming request (?)
-                res.status(200).json(newUser)
-            })
-        })
-        .catch(error => {
-            console.log("Error: ", error)
-            res.status(400).json(error)
-        });
-});
-
-router.post('/users/login', (req, res) => {
-
-
-})
+router.use('/comments', comment);
 
 module.exports = router;

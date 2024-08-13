@@ -1,28 +1,35 @@
+const path = require('path');
 const express = require('express');
-const path = require('path')
 const session = require('express-session');
-const exhbs = require('express-handlebars');
-const routes = require('./controllers');
-
-const sequelize = require('./config/connection');
+const exphbs = require('express-handlebars');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+const routes = require('./controllers');
+const sequelize = require('./config/connection');
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const hbs = exhbs.create();
-
 const sess = {
-  secret: 'Super secret secret',
-  cookie: {},
+  secret: 'very top secret',
+
+  cookie: {
+    httpOnly: true,
+    maxAge: 60 * 60 * 1000,
+    secure: false,
+    sameSite: 'strict',
+  },
   resave: false,
   saveUninitialized: true,
   store: new SequelizeStore({
-    db: sequelize
-  })
+    db: sequelize,
+  }),
 };
 
 app.use(session(sess));
+
+const hbs = exphbs.create({});
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
@@ -34,5 +41,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log('Now listening'));
+  app.listen(PORT, () =>
+    console.log(
+      `\nServer running on port ${PORT}. Visit http://localhost:${PORT} and post your first post!`
+    )
+  );
 });
